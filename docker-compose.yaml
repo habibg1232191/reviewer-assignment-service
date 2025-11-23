@@ -1,0 +1,102 @@
+services:
+  reviewer-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "6060:6060"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
+    env_file:
+      - .env
+    restart: on-failure
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - reviewer-network
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reviewer
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - reviewer-network
+
+  migrator:
+    image: migrate/migrate:v4.18.1
+    volumes:
+      - ./migrations:/migrations
+    command:
+      - "-path=/migrations"
+      - "-database=postgres://postgres:postgres@postgres:5432/reviewer?sslmode=disable"
+      - "up"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - reviewer-network
+
+#  prometheus:
+#    image: prom/prometheus:v2.47.0
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#    command:
+#      - "--config.file=/etc/prometheus/prometheus.yml"
+#    healthcheck:
+#      test: ["CMD", "wget", "--spider", "http://localhost:9090/-/healthy"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      - reviewer-network
+
+#  grafana:
+#    image: grafana/grafana:10.1.0
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      - GF_SECURITY_ADMIN_USER=admin
+#      - GF_SECURITY_ADMIN_PASSWORD=admin
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+#    depends_on:
+#      prometheus:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD", "wget", "--spider", "http://localhost:3000/api/health"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      - reviewer-network
+
+volumes:
+  postgres_data:
+  grafana_data:
+
+networks:
+  reviewer-network:
+    driver: bridge

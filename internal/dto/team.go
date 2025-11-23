@@ -3,7 +3,7 @@ package dto
 
 type TeamReq struct {
 	TeamName string       `json:"team_name"`
-	Members  []TeamMember `json:"team_member"`
+	Members  []TeamMember `json:"members"`
 }
 
 type TeamResponse struct {

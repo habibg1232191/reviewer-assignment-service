@@ -1,4 +1,4 @@
-module reviewer-assignment-service
+module github.com/habibg1232191/reviewer-assignment-service
 
 go 1.24.6
 

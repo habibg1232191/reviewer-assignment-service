@@ -1,0 +1,12 @@
+http_server:
+  addres: "0.0.0.0:8080"
+  timeout: 4s
+  idle_timeout: 60s
+
+postgres:
+  host: "postgres"
+  port: 5432
+  user: "postgres"
+  password: "postgres"
+  dbname: "reviewer"
+  sslmode: disable

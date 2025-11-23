@@ -8,6 +8,11 @@ type User struct {
 	IsActive bool   `json:"is_active"`
 }
 
+type UserGetPRReq struct {
+	UserID      string             `json:"user_id"`
+	PullRequest []PullRequestShort `json:"pull_request"`
+}
+
 type UserSetIsActiveReq struct {
 	UserID   string `json:"user_id"`
 	IsActive bool   `json:"is_active"`

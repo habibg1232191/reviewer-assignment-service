@@ -8,6 +8,7 @@ var (
 	ErrNotAssigned string = "NOT_ASSIGNED"
 	ErrNoCandidate string = "NO_CANDIDATE"
 	ErrNotFound    string = "NOT_FOUND"
+	ErrUndefined   string = "UNDEFINED"
 )
 
 type ErrorResponseDetail struct {

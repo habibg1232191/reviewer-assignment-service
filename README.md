@@ -34,14 +34,11 @@ cd reviewer-assignment-service
 ### 2. Запуск проект через Docker Compose
 ```bash
 docker-compose up
-```
 
 ### 3. Запуск проекта через Makefile
 ```bash
 make up
-```
 
 ## Очистка проекта
 ```bash
 make clean
-```

@@ -30,15 +30,19 @@
 ```bash
 git clone https://github.com/habibg1232191/reviewer-assignment-service
 cd reviewer-assignment-service
+```
 
 ### 2. Запуск проект через Docker Compose
 ```bash
 docker-compose up
+```
 
 ### 3. Запуск проекта через Makefile
 ```bash
 make up
+```
 
 ## Очистка проекта
 ```bash
 make clean
+```
